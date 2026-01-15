@@ -1,0 +1,49 @@
+.settings-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.settings-page h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.settings-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.settings-section h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.setting-option {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  gap: 10px;
+}
+
+.setting-option input[type="radio"],
+.setting-option input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.setting-option label {
+  cursor: pointer;
+  color: #555;
+  font-size: 16px;
+}
+
+.setting-option label:hover {
+  color: #007bff;
+}
