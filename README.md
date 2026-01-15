@@ -1,20 +1,28 @@
-<<<<<<< HEAD
-# React + Vite
+# Weather App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple React application for checking weather conditions by searching for cities.
 
-Currently, two official plugins are available:
+## Features
+- Search for cities with autocomplete
+- Display current weather data
+- Responsive design
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Installation
+1. Clone the repo: `git clone https://github.com/Paritosh-Kailas/Weather-App.git`
+2. Install dependencies: `npm install`
+3. Create a `.env.local` file with your API key: `VITE_API_KEY=your_key_here`
+4. Run the app: `npm run dev`
 
-## React Compiler
+## Usage
+- Open the app in your browser.
+- Type a city name in the search bar to get weather info.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technologies
+- React
+- Vite
+- AsyncPaginate (for search)
+- Weather API (e.g., OpenWeatherMap or similar)
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# Weather-App
->>>>>>> 08df38d57ca610ce837c318370d8d1718f17a34b
+## License
+MIT# Weather_app
+A React-based weather app that lets users search for cities and view current weather data using APIs.
