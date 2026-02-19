@@ -3,9 +3,9 @@ import { AsyncPaginate } from "react-select-async-paginate";
           
 
 
-const Search = () => {
+const Search = ({ onCitySelect }) => {
     const [search, setSearch] = useState(null);
-    const [Error, setError] = useState(null);
+    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const loadOptions = (inputValue) => {
@@ -24,26 +24,36 @@ const Search = () => {
         .then(response => response.json())
         .then(data => {
             return data.data.map(city => ({
-                value: city.id,
+                value: `${city.name}, ${city.countryCode}`,
                 label: `${city.name}, ${city.countryCode}`
-               
             }));
         })
         .catch(err => {
             setError(err.message);
-            return { options: [] }; // fallback
+            return { options: [] };
         })
         .finally(() => setLoading(false));
     };
 
-
+    const handleChange = (selected) => {
+        if (selected && selected.value) {
+            setSearch(selected);
+            if (onCitySelect) {
+                onCitySelect(selected.value);
+            }
+        }
+    };
 
     return (
-        <AsyncPaginate
-            placeholder="Search for a city..."
-            loadOptions={loadOptions}
-            onChange={setSearch}
-        />
+        <div className="search-container">
+            <AsyncPaginate
+                placeholder="Search for a city..."
+                loadOptions={loadOptions}
+                onChange={handleChange}
+                isLoading={loading}
+            />
+            {error && <p className="search-error" role="alert">Error: {error}</p>}
+        </div>
     );
     
 };

@@ -13,81 +13,101 @@ export default function Weather() {
   const [showSearch, setShowSearch] = useState(false);
   const { weather, loading, error, locationStatus, units, fetchByCity, requestLocation, setUnits, refresh } = useWeather();
 
-  const handleSearch = (cityName) => {
+  const handleToggleSearch = () => {
+    setShowSearch(prev => !prev);
+  };
+
+  const handleCitySelect = (cityName) => {
     fetchByCity(cityName);
     setShowSearch(false);
   };
 
-  const handleUnitChange = (newUnit) => {
-    setUnits(newUnit);
-  };
-
-  // Loading state: initial load
+  // Loading state: initial data fetch
   if (loading && !weather) {
     return (
-      <div className="weather-container">
+      <div className="loading-overlay">
         <p>Loading weather data...</p>
       </div>
     );
   }
 
-  // Error state
+  // Error state with no cached data
   if (error && !weather) {
     return (
-      <div className="weather-container error">
-        <p>⚠️ {error}</p>
-        <button onClick={requestLocation}>Try Using My Location</button>
-        <button onClick={() => setShowSearch(true)}>Search for a City</button>
+      <div className="error-overlay">
+        <p>Error: {error}</p>
+        <button onClick={requestLocation} aria-label="Request location permission">Try Location Again</button>
+        <button onClick={handleToggleSearch} aria-label="Open city search">Search for a City</button>
       </div>
     );
   }
 
-  // No data yet: show CTA
+  // Welcome state: no data yet
   if (!weather) {
     return (
       <div className="weather-container welcome">
-        <h2>Weather App</h2>
-        <p>Get started by allowing location access or searching for a city.</p>
-        <div className="cta-buttons">
-          <button onClick={requestLocation} disabled={locationStatus === "loading"}>
+        <h1>Weather App</h1>
+        <p>Get started by choosing an option below:</p>
+        <div className="welcome-buttons">
+          <button 
+            onClick={requestLocation} 
+            disabled={locationStatus === "loading"}
+            aria-label="Use device location"
+          >
             {locationStatus === "loading" ? "Detecting location..." : "Use My Location"}
           </button>
-          <button onClick={() => setShowSearch(true)}>Search for a City</button>
+          <button 
+            onClick={handleToggleSearch}
+            aria-label="Search for a city"
+          >
+            Search for a City
+          </button>
         </div>
+        {showSearch && <Search onCitySelect={handleCitySelect} />}
       </div>
     );
   }
 
-  // Weather data available: show card
+  // Main weather display
   return (
     <div className="weather-container">
       <div className="weather-header">
         <h1>{weather.name || "Unknown Location"}</h1>
-        <div className="weather-controls">
-          <button onClick={refresh} disabled={loading} title="Refresh weather">
-            🔄
+        <div className="controls" role="toolbar" aria-label="Weather controls">
+          <button 
+            onClick={handleToggleSearch}
+            aria-label="Toggle city search"
+            title="Search for a city"
+          >
+            {showSearch ? "Close Search" : "Search"}
           </button>
-          <button onClick={() => setShowSearch(true)} title="Search city">
-            🔍
+          <button 
+            onClick={refresh}
+            disabled={loading}
+            aria-label="Refresh weather data"
+            title="Refresh weather"
+          >
+            🔄 Refresh
           </button>
-          <select value={units} onChange={(e) => handleUnitChange(e.target.value)} title="Change units">
-            <option value="metric">°C (metric)</option>
-            <option value="imperial">°F (imperial)</option>
+          <select 
+            value={units} 
+            onChange={(e) => setUnits(e.target.value)}
+            aria-label="Temperature units"
+          >
+            <option value="metric">°C (Celsius)</option>
+            <option value="imperial">°F (Fahrenheit)</option>
           </select>
         </div>
       </div>
 
-      {loading && <p className="loading-indicator">Updating...</p>}
-
-      <WeatherCard weatherData={weather} units={units} />
-
-      {error && <p className="error-text">Note: {error}</p>}
-
-      {showSearch && (
-        <div className="search-overlay">
-          <Search onSearch={handleSearch} onClose={() => setShowSearch(false)} />
-        </div>
-      )}
+      {loading && <p className="loading-indicator" role="status">Updating weather...</p>}
+      {showSearch && <Search onCitySelect={handleCitySelect} />}
+      {weather && <WeatherCard weather={weather} units={units} />}
+      {error && <p className="error-text" role="alert">Note: {error}</p>}
     </div>
   );
 }
+
+
+
+  
