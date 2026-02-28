@@ -8,31 +8,37 @@ const Search = ({ onCitySelect }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const loadOptions = (inputValue) => {
-        if (!inputValue) return Promise.resolve({ options: [] });
+    const loadOptions = async (inputValue) => {
+        if (!inputValue) {
+            return { options: [] };
+        }
+
         setLoading(true);
-        return fetch(
-            `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${inputValue}`,
-            {
-                method: "GET",
-                headers: {
-                    "X-RapidAPI-Key": import.meta.env.VITE_API_KEY,
-                    "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
+        try {
+            const resp = await fetch(
+                `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${inputValue}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "X-RapidAPI-Key": import.meta.env.VITE_API_KEY,
+                        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
+                    }
                 }
-            }
-        )
-        .then(response => response.json())
-        .then(data => {
-            return data.data.map(city => ({
-                value: `${city.name}, ${city.countryCode}`,
-                label: `${city.name}, ${city.countryCode}`
-            }));
-        })
-        .catch(err => {
+            );
+            const data = await resp.json();
+            return {
+                options: data.data.map(city => ({
+                    value: `${city.name}, ${city.countryCode}`,
+                    label: `${city.name}, ${city.countryCode}`
+                })),
+                hasMore: false
+            };
+        } catch (err) {
             setError(err.message);
             return { options: [] };
-        })
-        .finally(() => setLoading(false));
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleChange = (selected) => {
